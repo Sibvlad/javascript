@@ -1,7 +1,7 @@
 # Личный проект «Кекстаграм» [![Build status][travis-image]][travis-url] [![Dependency status][dependency-image]][dependency-url]
 
 * Студент: [Владислав Сибирев](https://up.htmlacademy.ru/javascript/7/user/213757).
-* Наставник: `Неизвестно`.
+* Наставник: [Антон Попов] (https://up.htmlacademy.ru/javascript/7/user/78239)
 
 ---
 
