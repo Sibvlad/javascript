@@ -89,14 +89,14 @@
       // чего-либо с другой обводкой.
 
       // Толщина линии.
-      this._ctx.lineWidth = 6;
+      this._ctx.lineWidth = 4;
       // Цвет обводки.
       this._ctx.strokeStyle = '#ffe753';
       // Размер штрихов. Первый элемент массива задает длину штриха, второй
       // расстояние между соседними штрихами.
-      this._ctx.setLineDash([15, 10]);
+      // this._ctx.setLineDash([15, 10]);
       // Смещение первого штриха от начала линии.
-      this._ctx.lineDashOffset = 7;
+      // this._ctx.lineDashOffset = 7;
 
       // Сохранение состояния канваса.
       this._ctx.save();
@@ -125,11 +125,30 @@
       this._ctx.fillText(this._image.naturalWidth +" x "+ this._image.naturalHeight, - 40,  -this._resizeConstraint.side / 2- 10);
       // Отрисовка прямоугольника, обозначающего область изображения после
       // кадрирования. Координаты задаются от центра.
-      this._ctx.strokeRect(
-          (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
-          (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
-          this._resizeConstraint.side - this._ctx.lineWidth / 2,
-          this._resizeConstraint.side - this._ctx.lineWidth / 2);
+      // this._ctx.strokeRect(
+      //     (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
+      //     (-this._resizeConstraint.side / 2) - this._ctx.lineWidth / 2,
+      //     this._resizeConstraint.side - this._ctx.lineWidth / 2,
+      //     this._resizeConstraint.side - this._ctx.lineWidth / 2);
+
+      this._ctx.fillStyle = '#ffe753';
+      for (var i = 0; i < this._resizeConstraint.side; i += 13) {
+        this._ctx.beginPath();
+        this._ctx.arc(-this._resizeConstraint.side / 2 + i, -this._resizeConstraint.side / 2 - 3, 3, 0, 2 * Math.PI);
+        this._ctx.fill();
+
+        this._ctx.beginPath();
+        this._ctx.arc(this._resizeConstraint.side / 2 - 3, -this._resizeConstraint.side / 2 + i, 3, 0, 2 * Math.PI);
+        this._ctx.fill();
+
+        this._ctx.beginPath();
+        this._ctx.arc(this._resizeConstraint.side / 2 - i, this._resizeConstraint.side / 2 - 3, 3, 0, 2 * Math.PI);
+        this._ctx.fill();
+
+        this._ctx.beginPath();
+        this._ctx.arc(-this._resizeConstraint.side / 2 - 3, this._resizeConstraint.side / 2 - i, 3, 0, 2 * Math.PI);
+        this._ctx.fill();
+      }
 
       // Восстановление состояния канваса, которое было до вызова ctx.save
       // и последующего изменения системы координат. Нужно для того, чтобы
