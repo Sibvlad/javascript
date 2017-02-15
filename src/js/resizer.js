@@ -131,24 +131,57 @@
       //     this._resizeConstraint.side - this._ctx.lineWidth / 2,
       //     this._resizeConstraint.side - this._ctx.lineWidth / 2);
 
-      this._ctx.fillStyle = '#ffe753';
-      for (var i = 0; i < this._resizeConstraint.side; i += 13) {
-        this._ctx.beginPath();
-        this._ctx.arc(-this._resizeConstraint.side / 2 + i, -this._resizeConstraint.side / 2 - 3, 3, 0, 2 * Math.PI);
-        this._ctx.fill();
+      this._ctx.strokeStyle = '#ffe753';
+      this._ctx.beginPath();
+      var number = 50;
+      var step = this._resizeConstraint.side / number;
+      var hdiff = step;
+      var startX1,x;
+      var startY1,y;
 
-        this._ctx.beginPath();
-        this._ctx.arc(this._resizeConstraint.side / 2 - 3, -this._resizeConstraint.side / 2 + i, 3, 0, 2 * Math.PI);
-        this._ctx.fill();
+      startX1 = x = -this._resizeConstraint.side / 2 ;
+      startY1 = y = -this._resizeConstraint.side / 2 ;
 
-        this._ctx.beginPath();
-        this._ctx.arc(this._resizeConstraint.side / 2 - i, this._resizeConstraint.side / 2 - 3, 3, 0, 2 * Math.PI);
-        this._ctx.fill();
+      this._ctx.moveTo(x, y);
 
-        this._ctx.beginPath();
-        this._ctx.arc(-this._resizeConstraint.side / 2 - 3, this._resizeConstraint.side / 2 - i, 3, 0, 2 * Math.PI);
-        this._ctx.fill();
+      var newY = y;
+      for (var i = 1; i <= number; i++) {
+        var newX = x + i*step;
+        newY = (i % 2) ? newY + hdiff : newY - hdiff;
+        this._ctx.lineTo(newX, newY);
       }
+      this._ctx.stroke();
+
+      x = newX;
+      y = newY;
+      this._ctx.moveTo(x, y);
+      for (i = 1; i <= number; i++) {
+        newX = (i % 2) ? newX + hdiff : newX - hdiff;
+        newY = y + i*step;
+        this._ctx.lineTo(newX, newY);
+      }
+      this._ctx.stroke();
+
+      x = newX;
+      y = newY;
+      this._ctx.moveTo(x, y);
+      for (i = 1; i <= number; i++) {
+        newY = (i % 2) ? newY - hdiff : newY + hdiff;
+        newX = x - i*step;
+        this._ctx.lineTo(newX, newY);
+      }
+      this._ctx.stroke();
+
+      x = newX;
+      y = newY;
+      this._ctx.moveTo(x, y);
+      for (i = 1; i < number; i++) {
+          newX = (i % 2) ? newX - hdiff : newX + hdiff;
+          newY = y - i*step;
+        this._ctx.lineTo(newX, newY);
+      }
+      this._ctx.lineTo(startX1, startY1);
+      this._ctx.stroke();
 
       // Восстановление состояния канваса, которое было до вызова ctx.save
       // и последующего изменения системы координат. Нужно для того, чтобы
