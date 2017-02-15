@@ -72,7 +72,17 @@
    * @return {boolean}
    */
   var resizeFormIsValid = function() {
-    return true;
+    var fromX = parseInt(document.getElementById("resize-x").value);
+    var fromY = parseInt(document.getElementById("resize-y").value);
+    var size = parseInt(document.getElementById("resize-size").value);
+    var uploadForm = document.getElementById("upload-resize");
+
+    if (fromX >= 0 && fromY >= 0 && (fromX + size) <= currentResizer._image.naturalWidth && (fromY + size) <= currentResizer._image.naturalWidth) {
+      return true;
+    } else {
+      uploadForm.setAttribute("disabled", "disabled");
+      return false
+    }
   };
 
   /**
