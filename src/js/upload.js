@@ -206,12 +206,20 @@
     if (resizeFormIsValid()) {
       var image = currentResizer.exportImage().src;
 
+      var cookie = Cookies.get("upload-filter") || "none";
+
+      var elemFromCookie = [].filter.call(filterForm.elements, function (item) {
+        return item.value === cookie;
+      })[0];
+      elemFromCookie.setAttribute("checked", "checked")
+
       var thumbnails = filterForm.querySelectorAll('.upload-filter-preview');
       for (var i = 0; i < thumbnails.length; i++) {
         thumbnails[i].style.backgroundImage = 'url(' + image + ')';
       }
 
       filterImage.src = image;
+      filterImage.classList.add("filter-" + cookie);
 
       resizeForm.classList.add('invisible');
       filterForm.classList.remove('invisible');
@@ -236,6 +244,21 @@
    */
   filterForm.onsubmit = function(evt) {
     evt.preventDefault();
+
+    var selectedFilter = [].filter.call(filterForm['upload-filter'], function (item) {
+      return item.checked;
+    })[0].value;
+
+    var birthdayHopper = new Date();
+    birthdayHopper.setMonth(11, 6);
+    var today = new Date();
+
+    if (birthdayHopper > today) {
+      birthdayHopper.setYear(birthdayHopper.getFullYear() - 1);
+    }
+    var expires = parseInt((today - birthdayHopper) / 1000 / 60 / 60 / 24);
+    console.log(expires);
+    Cookies.set("upload-filter", selectedFilter, {expires: expires});
 
     cleanupResizer();
     updateBackground();
