@@ -1,9 +1,9 @@
-define(["pictures.one"], function (one) {
-  return function (pictures) {
-    var container = document.getElementById("pictures");
+define(["pictures.one"], function (createPictureBlock) {
+  return function (pictures, target) {
+    var container = document.getElementById(target);
 
     pictures.forEach(function (picture) {
-      container.appendChild(one(picture));
+      container.appendChild(createPictureBlock(picture));
     });
   };
 });
