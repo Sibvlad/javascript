@@ -1,6 +1,6 @@
 'use strict';
 
-require(['pictures.list', 'pictures.load', 'upload'], function (renderPictures, load) {
+require(['pictures.list', 'pictures.load', 'gallery', 'upload'], function (renderPictures, load, gallery) {
   var URL = "http://localhost:63342/213757-kekstagram/bin/data/pictures.js";
 
   var onLoad = function (data) {
