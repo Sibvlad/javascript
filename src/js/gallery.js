@@ -32,7 +32,8 @@ define(function () {
 
   Gallery.prototype.hide = function () {
     this.overlayElement.classList.add("invisible");
-
+    this.imageElement.onclick = null;
+    this.closeElement.onclick = null;
   };
 
   Gallery.prototype.setActivePicture = function (number) {

@@ -1,4 +1,4 @@
-define(["pictures.one", "gallery"], function (createPictureBlock, createGallery) {
+define(["pictures.one", "gallery"], function (Picture, createGallery) {
   return function (pictures, target) {
     var gallery = createGallery();
     gallery.setPictures(pictures);
@@ -6,7 +6,8 @@ define(["pictures.one", "gallery"], function (createPictureBlock, createGallery)
     var container = document.getElementById(target);
 
     pictures.forEach(function (picture) {
-      container.appendChild(createPictureBlock(picture, gallery));
+      var pic = new Picture(picture, gallery);
+      container.appendChild(pic.element);
     });
   };
 });

@@ -1,6 +1,6 @@
 'use strict';
 define(function () {
-  return function (picture, gallery) {
+  var Picture = function (picture, gallery) {
     var pictureTemplate = document.getElementById("picture-template");
     var pictureTemplateContainer = 'content' in pictureTemplate ? pictureTemplate.content : pictureTemplate;
 
@@ -31,6 +31,12 @@ define(function () {
       gallery.show(gallery.pictures.indexOf(picture));
     };
 
-    return pictureElement
+    this.data = picture;
+    this.element = pictureElement;
+
+    this.remove = function () {
+      this.element.onclick = null;
+    };
   }
+  return Picture;
 });
