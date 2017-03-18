@@ -37,6 +37,6 @@ define(function () {
     this.remove = function () {
       this.element.onclick = null;
     };
-  }
+  };
   return Picture;
 });

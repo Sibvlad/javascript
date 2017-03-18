@@ -1,4 +1,4 @@
-jsonpCallback_04032017([{
+[{
   "likes": 40,
   "comments": 12,
   "url": "photos/1.jpg"
@@ -103,4 +103,4 @@ jsonpCallback_04032017([{
   "comments": 11,
   "url": "photos/26.mp4",
   "preview": "photos/26.jpg"
-}]);
+}]

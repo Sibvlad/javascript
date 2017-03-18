@@ -17,8 +17,7 @@ define(function () {
   Gallery.prototype.show = function (number) {
     var self = this;
 
-    this.closeElement.onclick = function (event) {
-      event.preventDefault();
+    this.closeElement.onclick = function () {
       self.closeHandler();
     };
 
@@ -38,8 +37,6 @@ define(function () {
 
   Gallery.prototype.setActivePicture = function (number) {
     this.activePicture = number;
-
-    console.log(number);
     if (this.pictures[number]) {
       this.imageElement.src = this.pictures[number].url;
 
