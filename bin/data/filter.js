@@ -1,9 +1,9 @@
 'use strict';
 
-module.exports = function(list, filterID) {
+module.exports = function (list, filterID) {
 
   var comments = function (a, b) {
-    return a.comments - b.comments;
+    return b.comments - a.comments;
   };
 
   var newComp = function (a, b) {
@@ -11,20 +11,22 @@ module.exports = function(list, filterID) {
   };
 
   var likes = function (a, b) {
-    return a.likes - b.likes;
+    return b.likes - a.likes;
   };
 
+  var sortFun = likes;
+
   switch (filterID) {
-    case "filter-popular":
-      list.sort(likes);
+    case "popular":
+      sortFun = likes;
       break;
-    case "filter-new":
-      list.sort(newComp);
+    case "new":
+      sortFun = newComp;
       break;
-    default:
-      list.sort(comments);
+    case "discussed":
+      sortFun = comments;
       break;
   }
 
-  return list;
+  return list.sort(sortFun);
 };

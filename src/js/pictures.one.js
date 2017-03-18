@@ -20,7 +20,12 @@ define(function () {
       pictureElement.classList.add('picture-load-failure');
     };
 
-    image.src = picture.url;
+    if (picture.hasOwnProperty("preview")) {
+      image.src = picture.preview;
+    } else {
+      image.src = picture.url;
+    }
+
 
     imageTimeout = setTimeout(function () {
       pictureElement.classList.add('picture-load-failure');

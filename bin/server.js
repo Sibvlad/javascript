@@ -62,6 +62,7 @@ app.use(middleware);
 app.get(projectNameToAPIURL.get(projectName), (req, res) => {
   let jsonpCallback = req.query.callback;
   data.read(req.query.filter, req.query.from, req.query.to, jsonpCallback).then((data) => {
+    res.header('Access-Control-Allow-Origin', 'http://localhost:63342');
     res.header('Content-Type', 'application/' + (jsonpCallback ? 'javascript' : 'json')).send(data);
   }).catch(err => {
     console.error('Ошибка при запросе к API', err.message);

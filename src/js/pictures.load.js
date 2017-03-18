@@ -5,7 +5,7 @@ define(function () {
 
     xhr.onload = function (event) {
       var loadedData = JSON.parse(event.target.response);
-      callback(loadedData.slice(options.from, options.to));
+      callback(loadedData);
     };
 
     var params = "?";

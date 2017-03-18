@@ -1,7 +1,6 @@
 'use strict';
 
 
-console.log(require);
 require(['pictures.list', 'pictures.load', 'gallery', 'upload'], function (renderPictures, load) {
   var URL = "http://localhost:1507/api/pictures";
   var THROTTLE_DELAY = 100;
@@ -11,7 +10,7 @@ require(['pictures.list', 'pictures.load', 'gallery', 'upload'], function (rende
   var loadOptions = {
     from: 0,
     to: PAGE_SIZE,
-    filter: "filter-popular"
+    filter: "popular"
   };
 
   var onLoad = function (data) {
@@ -40,7 +39,7 @@ require(['pictures.list', 'pictures.load', 'gallery', 'upload'], function (rende
     var form = document.getElementsByClassName("filters")[0];
 
     form.addEventListener("change", function (event) {
-      loadOptions.filter = "filter-" + event.target.value;
+      loadOptions.filter = event.target.value;
       loadOptions.from = 0;
       loadOptions.to = PAGE_SIZE;
       load(URL, loadOptions, onLoad);
