@@ -46,7 +46,7 @@ define(['resizer'], function (Resizer) {
    * Удаляет текущий объект {@link Resizer}, чтобы создать новый с другим
    * изображением.
    */
-  var cleanupResizer = function() {
+  var cleanupResizer = function () {
     if (currentResizer) {
       currentResizer.remove();
       currentResizer = null;
@@ -56,7 +56,7 @@ define(['resizer'], function (Resizer) {
   /**
    * Ставит одну из трех случайных картинок на фон формы загрузки.
    */
-  var updateBackground = function() {
+  var updateBackground = function () {
     var images = [
       'img/logo-background-1.jpg',
       'img/logo-background-2.jpg',
@@ -72,7 +72,7 @@ define(['resizer'], function (Resizer) {
    * Проверяет, валидны ли данные, в форме кадрирования.
    * @return {boolean}
    */
-  var resizeFormIsValid = function() {
+  var resizeFormIsValid = function () {
     var fromX = parseInt(document.getElementById("resize-x").value);
     var fromY = parseInt(document.getElementById("resize-y").value);
     var size = parseInt(document.getElementById("resize-size").value);
@@ -119,7 +119,7 @@ define(['resizer'], function (Resizer) {
    * @param {string=} message
    * @return {Element}
    */
-  var showMessage = function(action, message) {
+  var showMessage = function (action, message) {
     var isError = false;
 
     switch (action) {
@@ -139,7 +139,7 @@ define(['resizer'], function (Resizer) {
     return uploadMessage;
   };
 
-  var hideMessage = function() {
+  var hideMessage = function () {
     uploadMessage.classList.add('invisible');
   };
 
@@ -150,7 +150,7 @@ define(['resizer'], function (Resizer) {
    * и показывается форма кадрирования.
    * @param {Event} evt
    */
-  uploadForm.onchange = function(evt) {
+  uploadForm.addEventListener('change', function (evt) {
     var element = evt.target;
     if (element.id === 'upload-file') {
       // Проверка типа загружаемого файла, тип должен быть изображением
@@ -160,7 +160,7 @@ define(['resizer'], function (Resizer) {
 
         showMessage(Action.UPLOADING);
 
-        fileReader.onload = function() {
+        fileReader.addEventListener('load', function () {
           cleanupResizer();
 
           currentResizer = new Resizer(fileReader.result);
@@ -171,7 +171,7 @@ define(['resizer'], function (Resizer) {
           resizeForm.classList.remove('invisible');
 
           hideMessage();
-        };
+        });
 
         fileReader.readAsDataURL(element.files[0]);
       } else {
@@ -179,14 +179,15 @@ define(['resizer'], function (Resizer) {
         showMessage(Action.ERROR);
       }
     }
-  };
+  });
+
 
   /**
    * Обработка сброса формы кадрирования. Возвращает в начальное состояние
    * и обновляет фон.
    * @param {Event} evt
    */
-  resizeForm.onreset = function(evt) {
+  resizeForm.addEventListener('reset', function (evt) {
     evt.preventDefault();
 
     cleanupResizer();
@@ -194,14 +195,27 @@ define(['resizer'], function (Resizer) {
 
     resizeForm.classList.add('invisible');
     uploadForm.classList.remove('invisible');
-  };
+  });
 
+  resizeForm.addEventListener('change', function (event) {
+    var target = event.target;
+    var constraint = currentResizer.getConstraint();
+
+    if (target.name === "x") {
+      currentResizer.moveConstraint(target.value - constraint.x, 0, 0);
+    } else if (target.name === "y") {
+      currentResizer.moveConstraint(0, target.value - constraint.y, 0);
+    } else {
+      currentResizer.moveConstraint(0, 0, target.value - constraint.side);
+    }
+
+  });
   /**
    * Обработка отправки формы кадрирования. Если форма валидна, экспортирует
    * кропнутое изображение в форму добавления фильтра и показывает ее.
    * @param {Event} evt
    */
-  resizeForm.onsubmit = function(evt) {
+  resizeForm.addEventListener('submit', function (evt) {
     evt.preventDefault();
 
     if (resizeFormIsValid()) {
@@ -225,25 +239,27 @@ define(['resizer'], function (Resizer) {
       resizeForm.classList.add('invisible');
       filterForm.classList.remove('invisible');
     }
-  };
+  });
+
 
   /**
    * Сброс формы фильтра. Показывает форму кадрирования.
    * @param {Event} evt
    */
-  filterForm.onreset = function(evt) {
+  filterForm.addEventListener('reset', function (evt) {
     evt.preventDefault();
 
     filterForm.classList.add('invisible');
     resizeForm.classList.remove('invisible');
-  };
+  });
+
 
   /**
    * Отправка формы фильтра. Возвращает в начальное состояние, предварительно
    * записав сохраненный фильтр в cookie.
    * @param {Event} evt
    */
-  filterForm.onsubmit = function(evt) {
+  filterForm.addEventListener('submit', function (evt) {
     evt.preventDefault();
 
     var selectedFilter = [].filter.call(filterForm['upload-filter'], function (item) {
@@ -266,13 +282,14 @@ define(['resizer'], function (Resizer) {
 
     filterForm.classList.add('invisible');
     uploadForm.classList.remove('invisible');
-  };
+  });
+
 
   /**
    * Обработчик изменения фильтра. Добавляет класс из filterMap соответствующий
    * выбранному значению в форме.
    */
-  filterForm.onchange = function() {
+  filterForm.addEventListener('change', function () {
     if (!filterMap) {
       // Ленивая инициализация. Объект не создается до тех пор, пока
       // не понадобится прочитать его в первый раз, а после этого запоминается
@@ -285,7 +302,7 @@ define(['resizer'], function (Resizer) {
       };
     }
 
-    var selectedFilter = [].filter.call(filterForm['upload-filter'], function(item) {
+    var selectedFilter = [].filter.call(filterForm['upload-filter'], function (item) {
       return item.checked;
     })[0].value;
 
@@ -293,7 +310,19 @@ define(['resizer'], function (Resizer) {
     // убрать предыдущий примененный класс. Для этого нужно или запоминать его
     // состояние или просто перезаписывать.
     filterImage.className = 'filter-image-preview ' + filterMap[selectedFilter];
-  };
+  });
+
+  window.addEventListener('resizerchange', function () {
+    var constraint = currentResizer.getConstraint();
+    var x = resizeForm.querySelector("input[name='x']");
+    var y = resizeForm.querySelector("input[name='y']");
+    var size = resizeForm.querySelector("input[name='size']");
+
+    x.value = constraint.x;
+    y.value = constraint.y;
+    size.value = constraint.side;
+  });
+
 
   cleanupResizer();
   updateBackground();
