@@ -221,7 +221,8 @@ define(['resizer'], function (Resizer) {
     if (resizeFormIsValid()) {
       var image = currentResizer.exportImage().src;
 
-      var cookie = Cookies.get("upload-filter") || "none";
+      var cookie = localStorage.getItem("upload-filter") || "none";
+      // var cookie = Cookies.get("upload-filter") || "none";
 
       var elemFromCookie = [].filter.call(filterForm.elements, function (item) {
         return item.value === cookie;
@@ -274,8 +275,8 @@ define(['resizer'], function (Resizer) {
       birthdayHopper.setYear(birthdayHopper.getFullYear() - 1);
     }
     var expires = parseInt((today - birthdayHopper) / 1000 / 60 / 60 / 24);
-    console.log(expires);
-    Cookies.set("upload-filter", selectedFilter, {expires: expires});
+    // Cookies.set("upload-filter", selectedFilter, {expires: expires});
+    localStorage.setItem("upload-filter", selectedFilter);
 
     cleanupResizer();
     updateBackground();
