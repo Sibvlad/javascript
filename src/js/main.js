@@ -3,7 +3,6 @@
 
 require(['pictures.list', 'pictures.load', 'gallery', 'upload'], function (renderPictures, load) {
   var URL = "http://localhost:1507/api/pictures";
-  var THROTTLE_DELAY = 100;
   var footer = document.querySelector('footer');
   var TARGET = "pictures";
   var PAGE_SIZE = 12;
@@ -25,19 +24,25 @@ require(['pictures.list', 'pictures.load', 'gallery', 'upload'], function (rende
     }
   };
 
-  var setScrollPage = function () {
+  var throttle = function (operation, delay) {
     var lastCall = Date.now();
-    window.addEventListener('scroll', function () {
-      if (Date.now() - lastCall >= THROTTLE_DELAY) {
-        if (footer.getBoundingClientRect().bottom - window.innerHeight <= 100) {
-          load(URL, loadOptions, onLoad);
-        }
+
+    return function() {
+      if (Date.now() - lastCall >= delay) {
+        operation();
         lastCall = Date.now();
       }
-    });
+    };
+  };
 
+  var optimizedScroll = throttle(function () {
+    if (footer.getBoundingClientRect().bottom - window.innerHeight <= 100) {
+      load(URL, loadOptions, onLoad);
+    }
+  }, 100);
+
+  var changeFilterHandler = function () {
     var form = document.getElementsByClassName("filters")[0];
-
     form.addEventListener("change", function (event) {
       loadOptions.filter = event.target.value;
       loadOptions.from = 0;
@@ -48,9 +53,8 @@ require(['pictures.list', 'pictures.load', 'gallery', 'upload'], function (rende
     });
   };
 
-  setScrollPage();
+  window.addEventListener('scroll', optimizedScroll);
+  changeFilterHandler();
   load(URL, loadOptions, onLoad);
-
-
 });
 
